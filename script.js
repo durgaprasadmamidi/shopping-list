@@ -94,19 +94,46 @@ function addItem(e){
 
     // stoppoinng the default behaviour
     e.preventDefault();
+    const newInput = itemInput.value;
 
     // checking the empty string case
-    const newInput = itemInput.value;
     if(newInput === ''){
         alert('please enter the item');
         return;
     }
 
+    addItemToDOM(newInput);
+    addItemToLocalStorage(newInput);
+    checkUI();
+}
+
+function addItemToDOM(newInput){
+
     // create and return new Item element
     const li = createLi(newInput);
     itemList.appendChild(li);
-    checkUI();
 }
+
+function addItemToLocalStorage(newInput){
+
+    let itemsInLocalStorage;
+
+    //Check if local storage has any items
+    if(localStorage.getItem('items') == null){
+        itemsInLocalStorage = [];
+    }
+    else{
+        //Convert string to array
+        itemsInLocalStorage = JSON.parse(localStorage.getItem('items'));
+    }
+
+
+    itemsInLocalStorage.push(newInput);
+    //Convert to JSON string
+    localStorage.setItem('items',JSON.stringify(itemsInLocalStorage));
+
+}
+
 
 function createLi(newInput){
     const li = document.createElement('li');
