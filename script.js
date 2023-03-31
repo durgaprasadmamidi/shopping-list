@@ -86,6 +86,8 @@
 const itemInput = document.getElementById('item-input');
 const itemForm = document.getElementById('item-form');
 const itemList = document.getElementById('item-list');
+const removeIcon = document.querySelector('.fa-xmark');
+const clearBtn = document.querySelector('#clear');
 
 function addItem(e){
 
@@ -137,6 +139,23 @@ function notEnteringText(){
     itemInput.style.outlineStyle = 'none';
 }
 
+
+function deleteItem(e){
+    if(e.target.className.includes('fa-xmark')){
+        e.target.parentElement.parentElement.remove();
+    }
+}
+
+function clearItems(e){
+    while(itemList.firstChild){
+        console.log(itemList.lastChild);
+        itemList.removeChild(itemList.lastChild);
+    }
+}
+
 itemForm.addEventListener('submit',addItem);
 itemForm.addEventListener('focusin',enteringText);
 itemForm.addEventListener('focusout',notEnteringText);
+// console.log(removeIcon.outerHTML);
+itemList.addEventListener('click',deleteItem);
+clearBtn.addEventListener('click',clearItems);
