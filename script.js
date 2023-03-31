@@ -170,6 +170,20 @@ function checkUI(){
     }
 }
 
+// Filter items
+function filterItems(e){
+    const text = e.target.value.toLowerCase();
+    const items = itemList.querySelectorAll('li');
+    items.forEach((item)=>{
+        if(!item.textContent.toLowerCase().includes(text)){
+            item.style.display = 'none';
+        }
+        else{
+            item.style.display = 'flex';
+        }
+    })
+}
+
 
 itemForm.addEventListener('submit',addItem);
 itemForm.addEventListener('focusin',enteringText);
@@ -177,5 +191,6 @@ itemForm.addEventListener('focusout',notEnteringText);
 // console.log(removeIcon.outerHTML);
 itemList.addEventListener('click',deleteItem);
 clearBtn.addEventListener('click',clearItems);
+filterInput.addEventListener('input',filterItems);
 
 checkUI();
