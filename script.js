@@ -114,7 +114,7 @@ function addItemToDOM(newInput){
     itemList.appendChild(li);
 }
 
-function addItemToLocalStorage(newInput){
+function getItemsFromLocalStorage(){
 
     let itemsInLocalStorage;
 
@@ -126,14 +126,25 @@ function addItemToLocalStorage(newInput){
         //Convert string to array
         itemsInLocalStorage = JSON.parse(localStorage.getItem('items'));
     }
-
-
-    itemsInLocalStorage.push(newInput);
-    //Convert to JSON string
-    localStorage.setItem('items',JSON.stringify(itemsInLocalStorage));
-
+    return itemsInLocalStorage;
 }
 
+function addItemToLocalStorage(newInput){
+
+    let itemsInLocalStorage = getItemsFromLocalStorage();
+    itemsInLocalStorage.push(newInput);
+    //Convert to JSON string
+    localStorage.setItem('items',JSON.stringify(itemsInLocalStorage));ß
+}
+
+// Display items from local storage`
+function displayItems(){
+    let itemsInLocalStorage = getItemsFromLocalStorage();
+    itemsInLocalStorage.forEach((item)=>{
+        addItemToDOM(item);
+    });
+    checkUI();
+}
 
 function createLi(newInput){
     const li = document.createElement('li');
@@ -212,6 +223,8 @@ function filterItems(e){
 }
 
 
+//Initialize the app
+function init(){
 itemForm.addEventListener('submit',addItem);
 itemForm.addEventListener('focusin',enteringText);
 itemForm.addEventListener('focusout',notEnteringText);
@@ -219,5 +232,8 @@ itemForm.addEventListener('focusout',notEnteringText);
 itemList.addEventListener('click',deleteItem);
 clearBtn.addEventListener('click',clearItems);
 filterInput.addEventListener('input',filterItems);
-
+document.addEventListener('DOMContentLoaded',displayItems);
 checkUI();
+}
+
+init();
