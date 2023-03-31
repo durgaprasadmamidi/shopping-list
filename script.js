@@ -88,6 +88,7 @@ const itemForm = document.getElementById('item-form');
 const itemList = document.getElementById('item-list');
 const removeIcon = document.querySelector('.fa-xmark');
 const clearBtn = document.querySelector('#clear');
+const filterInput = document.querySelector('#filter');
 
 function addItem(e){
 
@@ -104,6 +105,7 @@ function addItem(e){
     // create and return new Item element
     const li = createLi(newInput);
     itemList.appendChild(li);
+    checkUI();
 }
 
 function createLi(newInput){
@@ -142,16 +144,32 @@ function notEnteringText(){
 
 function deleteItem(e){
     if(e.target.className.includes('fa-xmark')){
+        if(confirm('Do you want to delete?'))
         e.target.parentElement.parentElement.remove();
+        checkUI();
     }
 }
 
 function clearItems(e){
     while(itemList.firstChild){
-        console.log(itemList.lastChild);
         itemList.removeChild(itemList.lastChild);
     }
+    checkUI();
 }
+
+// Hide Filter items and clear all button
+function checkUI(){
+    const items = itemList.querySelectorAll('li');
+    if(items.length == 0){
+        clearBtn.style.display = 'none';
+        filterInput.style.display = 'none';
+    }
+    else{
+        clearBtn.style.display = 'block';
+        filterInput.style.display = 'block';
+    }
+}
+
 
 itemForm.addEventListener('submit',addItem);
 itemForm.addEventListener('focusin',enteringText);
@@ -159,3 +177,5 @@ itemForm.addEventListener('focusout',notEnteringText);
 // console.log(removeIcon.outerHTML);
 itemList.addEventListener('click',deleteItem);
 clearBtn.addEventListener('click',clearItems);
+
+checkUI();
