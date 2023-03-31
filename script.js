@@ -134,7 +134,7 @@ function addItemToLocalStorage(newInput){
     let itemsInLocalStorage = getItemsFromLocalStorage();
     itemsInLocalStorage.push(newInput);
     //Convert to JSON string
-    localStorage.setItem('items',JSON.stringify(itemsInLocalStorage));ß
+    localStorage.setItem('items',JSON.stringify(itemsInLocalStorage));
 }
 
 // Display items from local storage`
@@ -179,19 +179,34 @@ function notEnteringText(){
     itemInput.style.outlineStyle = 'none';
 }
 
-
-function deleteItem(e){
-    if(e.target.className.includes('fa-xmark')){
-        if(confirm('Do you want to delete?'))
-        e.target.parentElement.parentElement.remove();
-        checkUI();
+function onClickItem(e){
+    if(e.target.className.includes('remove-item')){
+        deleteItem(e);
     }
 }
+
+function removeItemFromLocalStorage(itemValue){
+    let itemsInLocalStorage = getItemsFromLocalStorage();
+    console.log(itemsInLocalStorage);
+    itemsInLocalStorage = itemsInLocalStorage.filter((i) => i!==itemValue);
+    localStorage.setItem('items',JSON.stringify(itemsInLocalStorage));
+    // displayItems();
+}
+
+function deleteItem(e){
+        if(confirm('Do you want to delete?'))
+        e.target.parentElement.parentElement.remove();
+        const itemValue = e.target.parentElement.parentElement.textContent;
+        removeItemFromLocalStorage(itemValue);
+        checkUI();
+}
+
 
 function clearItems(e){
     while(itemList.firstChild){
         itemList.removeChild(itemList.lastChild);
     }
+    localStorage.clear();
     checkUI();
 }
 
@@ -230,6 +245,7 @@ itemForm.addEventListener('focusin',enteringText);
 itemForm.addEventListener('focusout',notEnteringText);
 // console.log(removeIcon.outerHTML);
 itemList.addEventListener('click',deleteItem);
+itemList.addEventListener('click',onClickItem);
 clearBtn.addEventListener('click',clearItems);
 filterInput.addEventListener('input',filterItems);
 document.addEventListener('DOMContentLoaded',displayItems);
