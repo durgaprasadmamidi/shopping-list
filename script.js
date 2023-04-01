@@ -180,14 +180,13 @@ function notEnteringText(){
 }
 
 function onClickItem(e){
-    if(e.target.className.includes('remove-item')){
+    if(e.target.className.includes('fa-xmark')){
         deleteItem(e);
     }
 }
 
 function removeItemFromLocalStorage(itemValue){
     let itemsInLocalStorage = getItemsFromLocalStorage();
-    console.log(itemsInLocalStorage);
     itemsInLocalStorage = itemsInLocalStorage.filter((i) => i!==itemValue);
     localStorage.setItem('items',JSON.stringify(itemsInLocalStorage));
     // displayItems();
@@ -244,7 +243,7 @@ itemForm.addEventListener('submit',addItem);
 itemForm.addEventListener('focusin',enteringText);
 itemForm.addEventListener('focusout',notEnteringText);
 // console.log(removeIcon.outerHTML);
-itemList.addEventListener('click',deleteItem);
+// itemList.addEventListener('click',deleteItem);
 itemList.addEventListener('click',onClickItem);
 clearBtn.addEventListener('click',clearItems);
 filterInput.addEventListener('input',filterItems);
