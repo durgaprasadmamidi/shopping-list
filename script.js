@@ -89,6 +89,8 @@ const itemList = document.getElementById('item-list');
 const removeIcon = document.querySelector('.fa-xmark');
 const clearBtn = document.querySelector('#clear');
 const filterInput = document.querySelector('#filter');
+const formButton = itemForm.querySelector('button');
+let isEditMode = false;
 
 function addItem(e){
 
@@ -100,6 +102,13 @@ function addItem(e){
     if(newInput === ''){
         alert('please enter the item');
         return;
+    }
+
+    if(isEditMode){
+        const itemToEdit = itemList.querySelector('.edit-mode');
+        removeItemFromLocalStorage(itemToEdit.textContent);
+        itemToEdit.remove();
+        isEditMode = false;
     }
 
     addItemToDOM(newInput);
@@ -179,9 +188,22 @@ function notEnteringText(){
     itemInput.style.outlineStyle = 'none';
 }
 
+function setItemToEdit(item){
+    isEditMode = true;
+    itemList.querySelectorAll('li').
+    forEach((i)=> i.classList.remove('edit-mode'));
+    item.classList.add('edit-mode');
+    formButton.innerHTML = `<i class = "fa-solid fa-pen"></i> Update Item`;
+    formButton.style.backgroundColor = '#228B22';
+    itemInput.value = item.textContent; 
+
+}
 function onClickItem(e){
     if(e.target.className.includes('fa-xmark')){
         deleteItem(e);
+    }
+    else{
+        setItemToEdit(e.target);
     }
 }
 
@@ -193,11 +215,13 @@ function removeItemFromLocalStorage(itemValue){
 }
 
 function deleteItem(e){
+        if(e.target.className.includes('fa-xmark')){
         if(confirm('Do you want to delete?'))
         e.target.parentElement.parentElement.remove();
         const itemValue = e.target.parentElement.parentElement.textContent;
         removeItemFromLocalStorage(itemValue);
         checkUI();
+        }
 }
 
 
@@ -206,11 +230,13 @@ function clearItems(e){
         itemList.removeChild(itemList.lastChild);
     }
     localStorage.clear();
+    itemInput.value = '';
     checkUI();
 }
 
 // Hide Filter items and clear all button
 function checkUI(){
+    itemInput.value = '';
     const items = itemList.querySelectorAll('li');
     if(items.length == 0){
         clearBtn.style.display = 'none';
@@ -220,6 +246,10 @@ function checkUI(){
         clearBtn.style.display = 'block';
         filterInput.style.display = 'block';
     }
+
+    formButton.innerHTML = `<i class="fa-solid fa-plus"></i> Add Item`;
+    formButton.style.backgroundColor = '#333';
+    
 }
 
 // Filter items
@@ -243,7 +273,7 @@ itemForm.addEventListener('submit',addItem);
 itemForm.addEventListener('focusin',enteringText);
 itemForm.addEventListener('focusout',notEnteringText);
 // console.log(removeIcon.outerHTML);
-// itemList.addEventListener('click',deleteItem);
+itemList.addEventListener('click',deleteItem);
 itemList.addEventListener('click',onClickItem);
 clearBtn.addEventListener('click',clearItems);
 filterInput.addEventListener('input',filterItems);
