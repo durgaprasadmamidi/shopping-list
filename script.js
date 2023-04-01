@@ -202,7 +202,8 @@ function onClickItem(e){
     if(e.target.className.includes('fa-xmark')){
         deleteItem(e);
     }
-    else{
+    else if(!e.target.className.includes('items')){
+        console.log(e.target.innerHTML);
         setItemToEdit(e.target);
     }
 }
