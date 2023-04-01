@@ -106,14 +106,35 @@ function addItem(e){
 
     if(isEditMode){
         const itemToEdit = itemList.querySelector('.edit-mode');
+        // Checking for duplicate during edit mode
+        if(checkForDuplicate(newInput.toLowerCase())){
+            alert('item is already in list');
+            return;
+        }
         removeItemFromLocalStorage(itemToEdit.textContent);
         itemToEdit.remove();
         isEditMode = false;
+
     }
+    else{
+        if(checkForDuplicate(newInput.toLowerCase())){
+            alert('item is already in list');
+            return;
+        }
+    }
+    
+    
 
     addItemToDOM(newInput);
     addItemToLocalStorage(newInput);
     checkUI();
+}
+
+function checkForDuplicate(item){
+    let itemFromLocalStorage = getItemsFromLocalStorage();
+    itemFromLocalStorage = itemFromLocalStorage.map((item)=>item.toLowerCase());
+    if(itemFromLocalStorage.includes(item))
+    return true;
 }
 
 function addItemToDOM(newInput){
@@ -203,7 +224,6 @@ function onClickItem(e){
         deleteItem(e);
     }
     else if(!e.target.className.includes('items')){
-        console.log(e.target.innerHTML);
         setItemToEdit(e.target);
     }
 }
@@ -274,7 +294,7 @@ itemForm.addEventListener('submit',addItem);
 itemForm.addEventListener('focusin',enteringText);
 itemForm.addEventListener('focusout',notEnteringText);
 // console.log(removeIcon.outerHTML);
-itemList.addEventListener('click',deleteItem);
+// itemList.addEventListener('click',deleteItem);
 itemList.addEventListener('click',onClickItem);
 clearBtn.addEventListener('click',clearItems);
 filterInput.addEventListener('input',filterItems);
