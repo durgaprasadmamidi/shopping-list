@@ -200,12 +200,14 @@ function createIcon(classes){
     return Icon;
 }
 
+let intervalId;
+
 function enteringText(){
-    itemInput.style.outlineStyle = 'solid';
-    itemInput.style.outlineColor = '#3399FF80';
+    intervalId = setInterval(changeToRandomColour,1000)
 }
 
 function notEnteringText(){
+    clearInterval(intervalId);
     itemInput.style.outlineStyle = 'none';
 }
 
@@ -287,6 +289,11 @@ function filterItems(e){
     })
 }
 
+function changeToRandomColour(){
+    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+    itemInput.style.outlineStyle = 'solid';
+    itemInput.style.outlineColor = `#${randomColor}`;
+}
 
 //Initialize the app
 function init(){
